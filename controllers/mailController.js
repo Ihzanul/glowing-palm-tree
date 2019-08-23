@@ -5,15 +5,18 @@ const Mail = mongoose.model('Mails');
 
 var mail = new Mail();
 
-mail.mailNumber = () => {
-    db.Mail.findOne({query: {}, $orderby: {$mailNumber : -1}});
-}
-
-
-router.get('/', (req, res) => {
-    res.render("mail/addOrEdit",{
-        viewTitle: "Tambah Nomor Surat"
-    });
+router.get('/', async (req, res, next) => {
+    try {
+        const lastData = await Mail.find().sort({'mailNumber': -1}).limit(1)
+        res.render("mail/addOrEdit",{
+            viewTitle: "Tambah Nomor Surat",
+            mail: {
+                mailNumber: lastData[0].mailNumber+1
+            }
+        });
+    } catch(e) {
+        return next(e)
+    }
 });
 
 router.post('/', (req, res) => {
