@@ -19,53 +19,61 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.post('/', (req, res) => {
-    if (req.body._id == ''){
-        insertRecord(req, res);
-    }else {
-        updateRecord(req, res);
+router.post('/', async (req, res, next) => {
+    try {
+        const { 
+            mailNumber,
+            nama,
+            stambuk,
+            sign
+        } = req.body
+
+        const ref = await Mail.create({
+            mailNumber,
+            nama,
+            stambuk,
+            sign
+        }, function (err, doc) {
+            res.redirect('/list')
+        })
+
+    } catch(e) {
+        return next(e)
     }
 });
 
-function insertRecord(req, res){
-    mail.mailNumber = req.body.mailNumber;
-    mail.nama = req.body.nama;
-    mail.stambuk = req.body.stambuk;
-    mail.sign = req.body.sign;
-    mail.save((err, doc) => {
-        if (!err){
-            res.redirect('/list')
-        }else {
-            if (err.nama == 'ValidationError'){
-                handleValidationError(err, req.body);
-                res.render("mail/addOrEdit",{
-                    viewTitle: "Tambah Nomor Surat",
-                    mail: req.body
-                });
-            }else {
-                console.log('Error during insert record insertion : ' + err);
+router.get('/edit/:id', async (req, res, next) => {
+    try {
+        const oneData = await Mail.findOne({_id: req.params.id})
+        res.render("mail/Edit",{
+            viewTitle: "Tambah Nomor Surat",
+            mail: {
+                mailNumber: oneData.mailNumber,
+                nama: oneData.nama,
+                stambuk: oneData.stambuk,
+                sign: oneData.sign
             }
-        }
-    });
-}
+        });
+    } catch(e) {
+        return next(e)
+    }
+})
 
-function updateRecord(req, res) {
-    Mail.findByIdAndUpdate({_id: req.body._id}, req.body, {new: true}, (err, doc) => {
-        if (!err) {
-            res.redirect('/list');
-        }else {
-            if (err.nama == 'ValidationError') {
-                handleValidationError(err, req.body);
-                res.render("mail/adOrEdit", {
-                    viewTitle: 'Perbarui Data',
-                    mail: req.body
-                });
-            }else {
-                console.log('Error during record update : ' + err);
-            }
-        }
-    })
-}
+router.post('/edit', async (req, res, next) => {
+    try {
+        const { 
+            mailNumber,
+            nama,
+            stambuk,
+            sign
+        } = req.body
+
+        const ref = await Mail.updateOne({ mailNumber }, { $set: { nama, stambuk, sign } })
+        res.redirect('/list')
+    } catch(e) {
+        next(e)
+    }
+})
 
 router.get('/list', (req, res) => {
     Mail.find((err, docs) => {
@@ -76,7 +84,7 @@ router.get('/list', (req, res) => {
         }else {
             console.log('Error in retriving mail list : ' + err);
         }
-    });
+    }).sort({ mailNumber: 1 });
 });
 
 router.get('/print', (req, res) => {
