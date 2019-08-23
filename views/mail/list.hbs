@@ -1,0 +1,27 @@
+<h3><a class="btn btn-secondary" href="/"><i class="fa fa-plus"></i>Buat Baru</a> Daftar Nomor Surat</h3>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nomor Surat</th>
+            <th>Nama</th>
+            <th>Stambuk</th>
+            <th>Tanda Tangan</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each list}}
+        <tr>
+            <td>{{this.mailNumber}}</td>
+            <td>{{this.nama}}</td>
+            <td>{{this.stambuk}}</td>
+            <td>{{this.sign}}</td>
+            <td>
+                <a href="/{{this._id}}"><i class="fas fa-pencil-alt fa-lg" aria-hidden="true"></i></a>
+                <a href="/delete/{{this._id}}" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?');"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

@@ -1,0 +1,35 @@
+<body onload="window.print()">    
+<div class="wrap1" style="text-align: center">
+    <img src='https://upload.wikimedia.org/wikipedia/commons/6/60/Logo_Universitas_Tadulako_Palu.png' height='100' width='100' style="float: left">
+    <h5>KEMENTRIAN RISET, TEKNOLOGI DAN PENDIDIKAN TINGGI</h5>
+    <h3>UNIVERSITAS TADULAKO</h3>
+    <p>
+        Kampus Bumi Tadulako Tondo <br>
+        Jl.Soekarno Hatta Km. 9 Telp : (0451) 422611 - 422355 Fax: (0451) 422844 <br>
+        email: untad@untad.ac.id <br>
+        Palu - Sulawesi Tengah 94118 <br>
+    </p>
+    <hr width="100%" style="height:1px; color: grey; background-color:grey">
+</div>
+
+<table style="width: 100%; text-align: center" border="1px solid black">
+    <thead>
+        <tr>
+            <th>Nomor Surat</th>
+            <th>Nama</th>
+            <th>Stambuk</th>
+            <th>Tanda Tangan</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each list}}
+        <tr>
+            <td>{{this.mailNumber}}</td>
+            <td>{{this.nama}}</td>
+            <td>{{this.stambuk}}</td>
+            <td>{{this.sign}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+</body>

@@ -1,0 +1,33 @@
+<body>    
+    <h3>{{viewTitle}}</h3>
+
+    <form action="/" method="POST" autocomplete="off">
+    <input type="hidden" name="_id" value="{{mail._id}}">
+        <div class="form-group">
+            <label>Nomor Surat</label>
+            <input type="text" class="form-control" name="mailNumber" value="{{mail.mailNumber}}">
+        </div>
+        <div class="form-group">
+            <label>Nama</label>
+            <input type="text" class="form-control" name="nama" placeholder="Nama" value="{{mail.nama}}">
+            <div class="text-danger">
+                {{mail.namaError}}
+            </div>
+        </div>
+            <div class="form-group">
+            <label>Stambuk</label>
+            <input type="text" class="form-control" name="stambuk" placeholder="Stambuk" value="{{mail.stambuk}}">
+        </div>
+            <div class="form-group">
+            <label>TTD</label>
+            <input type="text" class="form-control" name="sign" value="{{mail.sign}}"></div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-info"><i class="fa fa-database"></i> Submit</button>
+            <a class="btn btn-secondary" href="/list"><i class="fa fa-list-alt"></i> Lihat Daftar</a>
+            <a class="btn btn-secondary" target='_blank' href="/print"><i class="fas fa-print"></i> Cetak</a>
+        </div>
+    </form>
+
+<script src="./JS/app.js"></script>
+<script src="./JS/signature_pad.umd.js"></script>
+</body>
