@@ -11,12 +11,15 @@
             <label>Nama</label>
             <input type="text" class="form-control" name="nama" placeholder="Nama" value="{{mail.nama}}">
             <div class="text-danger">
-                {{mail.namaError}}
+                {{errorNama}}
             </div>
         </div>
             <div class="form-group">
             <label>Stambuk</label>
             <input type="text" class="form-control" name="stambuk" placeholder="Stambuk" value="{{mail.stambuk}}">
+            <div class="text-danger">
+                {{errorStambuk}}
+            </div>
         </div>
             <div class="form-group">
             <label>TTD</label>
@@ -24,10 +27,6 @@
         <div class="form-group">
             <button type="submit" class="btn btn-info"><i class="fa fa-database"></i> Submit</button>
             <a class="btn btn-secondary" href="/list"><i class="fa fa-list-alt"></i> Lihat Daftar</a>
-            <a class="btn btn-secondary" target='_blank' href="/print"><i class="fas fa-print"></i> Cetak</a>
         </div>
     </form>
-
-<script src="./JS/app.js"></script>
-<script src="./JS/signature_pad.umd.js"></script>
 </body>

@@ -21,6 +21,7 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
     try {
+        const lastData = await Mail.find().sort({'mailNumber': -1}).limit(1)
         const { 
             mailNumber,
             nama,
@@ -34,10 +35,29 @@ router.post('/', async (req, res, next) => {
             stambuk,
             sign
         }, function (err, doc) {
-            res.redirect('/list')
-        })
-
-    } catch(e) {
+            if (nama == '') {
+                res.render("mail/addOrEdit", {
+                    viewTitle: "Tambah Nomor Surat",
+                    errorNama: "Nama harus di isi",
+                    mail: {
+                        mailNumber: lastData[0].mailNumber+1,
+                        stambuk: stambuk
+                    }
+                })
+            } else if (stambuk.length >=9 || stambuk.length <= 9) {
+                res.render("mail/addOrEdit", {
+                    viewTitle: "Tambah Nomor Surat",
+                    errorStambuk: "Isi stambuk dengan benar!!",
+                    mail: {
+                        mailNumber: lastData[0].mailNumber+1,
+                        nama: nama
+                    }
+                })
+            } else {
+                res.redirect('/list')
+            }
+        });
+    }catch(e) {
         return next(e)
     }
 });
@@ -117,6 +137,7 @@ function handleValidationError(err, body) {
     }
 }
 
+
 router.get('/:id', (req, res) => {
     Mail.findById(req.params.id, (err, doc) => {
         if (!err) {
@@ -137,5 +158,16 @@ router.get('/delete/:id', (req, res) => {
         }
     });
 });
+
+function validasi() {
+    var nama = req.mail.nama;
+    var stambuk = mail.mail.stambuk;
+
+    if (nama != "" && stambuk.length == 9) {
+        return true
+    } else {
+        alert('Nama tidak boleh kosong!');
+    }
+}
 
 module.exports = router;
