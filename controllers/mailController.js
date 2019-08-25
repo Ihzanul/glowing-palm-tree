@@ -44,7 +44,7 @@ router.post('/', async (req, res, next) => {
                         stambuk: stambuk
                     }
                 })
-            } else if (stambuk.length >=9 || stambuk.length <= 9) {
+            } else if (stambuk.length >9 || stambuk.length <9) {
                 res.render("mail/addOrEdit", {
                     viewTitle: "Tambah Nomor Surat",
                     errorStambuk: "Isi stambuk dengan benar!!",
@@ -119,24 +119,17 @@ router.get('/print', (req, res) => {
     });
 });
 
-function handleValidationError(err, body) {
-    for(field in err.errors)
-    {
-    switch (err.errors[fields].path) {
-        case 'nama':
-            body['namaError'] = err.errors[field].message;
-            break;
-
-        case 'stambuk':
-            body['stambukError'] = err.errors[field].message;
-            break;
-
-        default:
-            break;
+router.get('/sign', (req, res) => {
+    Mail.find((err, docs) => {
+        if (!err) {
+            res.render("mail/sign", {
+                viewTitle: 'Tes TTD'
+            });
+        }else {
+            console.log('Error in print : ' + err);
         }
-    }
-}
-
+    });
+});
 
 router.get('/:id', (req, res) => {
     Mail.findById(req.params.id, (err, doc) => {
@@ -159,15 +152,6 @@ router.get('/delete/:id', (req, res) => {
     });
 });
 
-function validasi() {
-    var nama = req.mail.nama;
-    var stambuk = mail.mail.stambuk;
 
-    if (nama != "" && stambuk.length == 9) {
-        return true
-    } else {
-        alert('Nama tidak boleh kosong!');
-    }
-}
 
 module.exports = router;
