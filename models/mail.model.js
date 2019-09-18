@@ -13,6 +13,7 @@ var mailSchema = new mongoose.Schema({
         required: 'This field is required'
     },
     sign: {
+        data: Buffer,
         type: String
     }
 });

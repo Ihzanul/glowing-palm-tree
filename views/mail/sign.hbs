@@ -1,28 +1,26 @@
 <h2>{{viewTitle}}</h2>
 
-<canvas id="draw" height="200" style="border: 1px solid grey; width: 100%"></canvas>
+<canvas id="draw" height="400" style="border: 1px solid grey; width: 100%"></canvas>
 
 <script>
 const canvas = document.querySelector('#draw');
 const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-ctx.strokeStyle = '#BADA55';
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
+ctx.strokeStyle = '#495057';
 ctx.lineJoin = 'round';
 ctx.lineCap = 'round';
-ctx.lineWidth = 40;
+ctx.lineWidth = 15;
 // ctx.globalCompositeOperation = 'multiply';
 
 let isDrawing = false;
 let lastX = 0;
 let lastY = 0;
-let hue = 0;
 let direction = true;
 
 function draw(e) {
   if (!isDrawing) return; // stop the fn from running when they are not moused down
   console.log(e);
-  ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
   ctx.beginPath();
   // start from
   ctx.moveTo(lastX, lastY);
@@ -34,6 +32,62 @@ function draw(e) {
   if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
     direction = !direction;
   }
+
+  ctx.beginPath();
+        ctx.moveTo(queue[0].x, queue[0].y);
+
+        //queue is an array of original points which were stored while onmousemove event callback
+
+        var tempQueue1 = [queue[0]];
+        for (var i = 1; i < queue.length - 1;  i = i+1) {
+            //if((Math.abs(queue[i].x - queue[i-1].x) >3 || Math.abs(queue[i].x - queue[i-1].x)<1) &&  (Math.abs(queue[i].y - queue[i-1].y) >3 || Math.abs(queue[i].y - queue[i-1].y)<1)){
+                var c = (queue[i].x + queue[i + 1].x) / 2;
+                var d = (queue[i].y + queue[i + 1].y) / 2;
+                //tempQueue.push(queue[i]);
+                tempQueue1.push({x:c, y:d});
+                //ctx.quadraticCurveTo(queue[i].x, queue[i].y, c, d);
+            //}
+        }
+
+        var tempQueue2 = [tempQueue1[0]];
+        for (var i = 1; i < tempQueue1.length - 1;  i = i+1) {
+            //if((Math.abs(queue[i].x - queue[i-1].x) >3 || Math.abs(queue[i].x - queue[i-1].x)<1) &&  (Math.abs(queue[i].y - queue[i-1].y) >3 || Math.abs(queue[i].y - queue[i-1].y)<1)){
+                var c = (tempQueue1[i].x + tempQueue1[i + 1].x) / 2;
+                var d = (tempQueue1[i].y + tempQueue1[i + 1].y) / 2;
+                //tempQueue.push(queue[i]);
+                tempQueue2.push({x:c, y:d});
+                //ctx.quadraticCurveTo(queue[i].x, queue[i].y, c, d);
+            //}
+        }
+
+        var tempQueue = [tempQueue2[0]];
+        for (var i = 1; i < tempQueue2.length - 1;  i = i+1) {
+            //if((Math.abs(queue[i].x - queue[i-1].x) >3 || Math.abs(queue[i].x - queue[i-1].x)<1) &&  (Math.abs(queue[i].y - queue[i-1].y) >3 || Math.abs(queue[i].y - queue[i-1].y)<1)){
+                var c = (tempQueue2[i].x + tempQueue2[i + 1].x) / 2;
+                var d = (tempQueue2[i].y + tempQueue2[i + 1].y) / 2;
+                //tempQueue.push(queue[i]);
+                tempQueue.push({x:c, y:d});
+                //ctx.quadraticCurveTo(queue[i].x, queue[i].y, c, d);
+            //}
+        }
+
+        for (var i = 1; i < tempQueue.length - 2;  i = i+1) {
+            //if((Math.abs(queue[i].x - queue[i-1].x) >3 || Math.abs(queue[i].x - queue[i-1].x)<1) &&  (Math.abs(queue[i].y - queue[i-1].y) >3 || Math.abs(queue[i].y - queue[i-1].y)<1)){
+                var c = (tempQueue[i].x + tempQueue[i + 1].x) / 2;
+                var d = (tempQueue[i].y + tempQueue[i + 1].y) / 2;
+                ctx.quadraticCurveTo(tempQueue[i].x, tempQueue[i].y, c, d);
+            //}
+        }
+
+        // For the last 2 points
+        ctx.quadraticCurveTo(
+        tempQueue[i].x,
+        tempQueue[i].y,
+        tempQueue[i+1].x,
+        tempQueue[i+1].y
+        );
+        ctx.stroke();
+        queue = [];
 }
 
 canvas.addEventListener('mousedown', (e) => {
@@ -45,4 +99,5 @@ canvas.addEventListener('mousedown', (e) => {
 canvas.addEventListener('mousemove', draw);
 canvas.addEventListener('mouseup', () => isDrawing = false);
 canvas.addEventListener('mouseout', () => isDrawing = false);
+
 </script>
